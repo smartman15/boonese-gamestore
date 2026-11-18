@@ -1,13 +1,14 @@
 import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { AppModule } from "./app.module";
+import { SqliteService } from './database/sqlite.service';
 
 
 describe('Transactions', () => {
     const request = require('supertest');
-    const express = require('express');
 
     let app: INestApplication;
+    let sqliteService: SqliteService;
 
 
     beforeAll(async () => {
@@ -15,6 +16,8 @@ describe('Transactions', () => {
             imports: [AppModule],
         })
         .compile();
+
+        sqliteService = moduleRef.get<SqliteService>(SqliteService);
 
         app = moduleRef.createNestApplication();
         await app.init();
@@ -31,11 +34,20 @@ describe('Transactions', () => {
             gameId: 3
         };
 
-        await request(app)
+        const response = await request(app.getHttpServer())
             .post('/transactions/purchase')
             .send(purchaseRequest)
 
-        
+        expect(response.headers["content-type"]).toMatch(/json/);
+        expect(response.status).toEqual(201);
+        expect(response.body.key).toBeDefined();
+
+        const key = await sqliteService.get<{status: string}>(
+            'SELECT status FROM game_keys WHERE key_code = ?',
+            [response.body.key]
+        )
+
+        expect(key?.status).toEqual('SOLD');
 
         // try{
         //     await request(app)
