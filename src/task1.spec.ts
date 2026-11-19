@@ -48,16 +48,6 @@ describe('Transactions', () => {
         )
 
         expect(key?.status).toEqual('SOLD');
-
-        // try{
-        //     await request(app)
-        //     .post('/transactions/purchase')
-        //     .send(purchaseRequest)
-        // } catch(err){
-        //     console.log(`oopsie, there was an error: ${err}`);
-        // }
-
-        
     });
 })
 
