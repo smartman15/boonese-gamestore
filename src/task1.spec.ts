@@ -65,7 +65,18 @@ describe('Transactions', () => {
         expect(response.status).toEqual(400);
     })
 
-    test.skip('Execute a query for a game that doesnt exist in database, returns status code 404', async () => {
+    test('Execute a query for a game that doesnt exist in database, returns status code 404', async () => {
+        const purchaseRequest = {
+            userId: 2,
+            gameId: 500
+        };
+
+        const response = await request(app.getHttpServer())
+            .post('/transactions/purchase')
+            .send(purchaseRequest)
+
+        expect(response.headers["content-type"]).toMatch(/json/);
+        expect(response.status).toEqual(404);
     })
 })
 
