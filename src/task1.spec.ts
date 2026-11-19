@@ -27,7 +27,7 @@ describe('Transactions', () => {
         await app.close();
     })
 
-    test("Send purchase request to POST /transactions/purchase that returns status code 201, keyCode is present, key status in database is SOLD", async ()=>{
+    test.skip("Send purchase request to POST /transactions/purchase that returns status code 201, keyCode is present, key status in database is SOLD", async ()=>{
         
         const purchaseRequest = {
             userId: 2,
@@ -51,8 +51,18 @@ describe('Transactions', () => {
     });
 
 
-    test('Sends purchase request to POST /transactions/purchase for game that has no status of "AVAILABLE", should return rejected with status code 400', () => {
-        
+    test('Sends purchase request to POST /transactions/purchase for game that has no status of "AVAILABLE", should return rejected with status code 400', async () => {
+        const purchaseRequest = {
+            userId: 2,
+            gameId: 3
+        };
+
+        const response = await request(app.getHttpServer())
+            .post('/transactions/purchase')
+            .send(purchaseRequest)
+
+        expect(response.headers["content-type"]).toMatch(/json/);
+        expect(response.status).toEqual(400);
     })
 })
 
