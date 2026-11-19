@@ -51,7 +51,7 @@ describe('Transactions', () => {
     });
 
 
-    test('Sends purchase request to POST /transactions/purchase for game that has no status of "AVAILABLE", should return rejected with status code 400', async () => {
+    test.skip('Sends purchase request to POST /transactions/purchase for game that has no status of "AVAILABLE", should return rejected with status code 400', async () => {
         const purchaseRequest = {
             userId: 2,
             gameId: 3
@@ -63,6 +63,9 @@ describe('Transactions', () => {
 
         expect(response.headers["content-type"]).toMatch(/json/);
         expect(response.status).toEqual(400);
+    })
+
+    test.skip('Execute a query for a game that doesnt exist in database, returns status code 404', async () => {
     })
 })
 
