@@ -49,6 +49,11 @@ describe('Transactions', () => {
 
         expect(key?.status).toEqual('SOLD');
     });
+
+
+    test('Sends purchase request to POST /transactions/purchase for game that has no status of "AVAILABLE", should return rejected with status code 400', () => {
+        
+    })
 })
 
 
